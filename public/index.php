@@ -24,8 +24,10 @@ $app->get('/', function (Request $request, Response $response, $args) {
 /*############### insert call ###############*/
 $app->post('/insert', function (Request $request, Response $response, $args) {
 	$obj = new Lists();
-	$text = $_POST["new-list-item-text"];
-	$insert = $obj->insert($text);
+	$postdata = $request->getParsedBody();
+	//echo "<pre>";var_dump($data);echo"</pre>";
+	$list = $postdata["list"];
+	$insert = $obj->insert($list);
 	if($insert =="success"){
 		$view =  $obj->viewallspecified();
 		$response->getBody()->write($view);
@@ -38,9 +40,10 @@ $app->post('/insert', function (Request $request, Response $response, $args) {
 /*############### colorupdate call ###############*/
 $app->post('/colorupdtae', function (Request $request, Response $response, $args) {
 	$obj = new Lists();
-	$id = $_POST["id"];
-	$color = $_POST["color"];
-	$obj->updateclr($color,$id);
+	$postdata = $request->getParsedBody();
+	$id = $postdata["id"];
+	$color = $postdata["color"];
+	$obj->updatecolour($color,$id);
 	$view =  $obj->viewallspecified();
 	$response->getBody()->write($view);
 	return $response;
@@ -50,8 +53,9 @@ $app->post('/colorupdtae', function (Request $request, Response $response, $args
 /*############### markread call ###############*/
 $app->post('/markread', function (Request $request, Response $response, $args) {
 	$obj = new Lists();
-	$id = $_POST["id"];
-	$obj-> updatemark($id);
+	$postdata = $request->getParsedBody();
+	$id = $postdata["id"];
+	$obj->updatemark($id);
 	$view =  $obj->viewallspecified();
 	$response->getBody()->write($view);
 	return $response;
@@ -61,8 +65,9 @@ $app->post('/markread', function (Request $request, Response $response, $args) {
 /*############### updatetext call ###############*/
 $app->post('/updatetext', function (Request $request, Response $response, $args) {
 	$obj = new Lists();
-	$id = $_POST["id"];
-	$text = $_POST["text"];
+	$postdata = $request->getParsedBody();
+	$id = $postdata["id"];
+	$text = $postdata["text"];
 	$obj-> updatetext($text,$id);
 	$view =  $obj->viewallspecified();
 	$response->getBody()->write($view);
@@ -73,8 +78,9 @@ $app->post('/updatetext', function (Request $request, Response $response, $args)
 /*############### delete call ###############*/
 $app->post('/delete', function (Request $request, Response $response, $args) {
 	$obj = new Lists();
-	$id = $_POST["id"];
-	$obj-> deletethat($id);
+	$postdata = $request->getParsedBody();
+	$id = $postdata["id"];
+	$obj->deletethat($id);
 	$view =  $obj->viewallspecified();
 	$response->getBody()->write($view);
 	return $response;
@@ -84,7 +90,8 @@ $app->post('/delete', function (Request $request, Response $response, $args) {
 /*############### updatepositions call ###############*/
 $app->post('/updatepositions', function (Request $request, Response $response, $args) {
 	$obj = new Lists();
-	foreach ($_POST["value"] as $key => $value) {
+	$postdata = $request->getParsedBody();
+	foreach ($postdata["value"] as $key => $value) {
 		$obj-> updateposition($key,$value);
 	}
 	$view =  $obj->viewallspecified();
